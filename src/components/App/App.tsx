@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function App() {
   return (
-    <Container className="App">
+    <Container>
+      
       <FontAwesomeIcon icon={ faHome } /> Home
     </Container>
   );
