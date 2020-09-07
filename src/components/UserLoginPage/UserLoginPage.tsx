@@ -55,7 +55,7 @@ export default class UserLoginPage extends React.Component {
 
     private doLogin() {
         api(
-            '/auth/user/login', 
+            'auth/user/login', 
             'post',
             {
                 email: this.state.email,
@@ -69,7 +69,7 @@ export default class UserLoginPage extends React.Component {
             }
 
             if (res.status === 'ok') {
-                if (res.data.statusCode !== undefined ) {
+                if ( res.data.statusCode !== undefined ) {
                     let message = '';
 
                     switch (res.data.statusCode) {

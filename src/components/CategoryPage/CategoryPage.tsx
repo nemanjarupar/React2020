@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListAlt, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { faListAlt } from '@fortawesome/free-solid-svg-icons';
 import CategoryType from '../../types/CategoryType';
 
 interface CategoryPageProperties {

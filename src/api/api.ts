@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { ApiConfig } from '../config/api.config';
 
-export default function api(
+export default function api (
     path: string, 
     method: 'get' | 'post' | 'patch' | 'delete',
     body: any | undefined,
@@ -65,32 +65,22 @@ async function responseHandler(
     res: AxiosResponse<any>,
     resolve: (value?: ApiResponse) => void,
 ) {
-    if (res.status < 200 || res.status >= 300) {
 
-       
-        
+    if (res.status < 200 || res.status >= 300) {
         const response: ApiResponse = {
             status: 'error',
             data: res.data,
         };
+
         return resolve(response);
     }
 
-    let response: ApiResponse;
+    const response: ApiResponse = {
+        status: 'ok',
+        data: res.data,
+    };
 
-    if (res.data.statusCode < 0) {
-        response = {
-            status: 'login',
-            data: null,
-        };
-    } else {
-        response = {
-            status: 'ok',
-            data: res.data,
-        };
-    }
-
-    resolve(response);
+    return resolve(response);
 
 
 }
@@ -105,7 +95,7 @@ export function saveToken(token: string) {
     localStorage.setItem('api_token', token);
 }
 
-function GetRefreshToken(): string {
+export function GetRefreshToken(): string {
     const token = localStorage.getItem('api_refresh_token');
 
     return token + '';
@@ -116,8 +106,7 @@ export function saveRefreshToken(token: string) {
     localStorage.getItem('api_refresh_token');
 }
 
-async function refreshToken(
-    ): Promise<string | null> {
+async function refreshToken(): Promise<string | null> {
         const path = 'auth/user/refresh';
         const data = {
             token: GetRefreshToken(),
@@ -131,7 +120,7 @@ async function refreshToken(
                 headers: {
                     'Content-Type': 'application/json'
                 },
-            }
+            };
             const rtr: { data: { token: string | undefined } } =  await axios(refreshTokenRequestData);
 
             if (!rtr.data.token) {
