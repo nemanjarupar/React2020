@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import api, { ApiResponse } from '../../api/api';
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
 
 interface UserRegistrationPageState {
     formData: {
@@ -56,6 +57,7 @@ export class UserRegistrationPage extends React.Component {
     render() {
         return (
         <Container>
+            <RoledMainMenu role="visitor" />
             <Col md={ { span: 6, offset: 3 } }>
                 <Card>
                     <Card.Body>
@@ -174,24 +176,26 @@ export class UserRegistrationPage extends React.Component {
         };
 
         api('auth/user/register/', 'post', data)
-            .then((res: ApiResponse) => {
-                if (res.status === 'error') {
-                    this.setErrorMessage('System error... Try again!');
-                    return;
-                }
+        .then((res: ApiResponse) => {
+            console.log(res);
 
-                if (res.data.statusCode !== undefined) {
-                    this.handleErrors(res.data);
-                    return;
-                }
+            if (res.status === 'error') {
+                this.setErrorMessage('System error... Try again!');
+                return;
+            }
 
-                this.registrationComplete();
-            })
+            if ( res.data.statusCode !== undefined ) {
+                this.handleErrors(res.data);
+                return;
+            }
+
+            this.registrationComplete();
+        })
     }
 
     private setErrorMessage(message: string) {
         const newState = Object.assign(this.state, {
-            message: message,    
+            message: message,
         });
 
         this.setState(newState);
@@ -209,7 +213,7 @@ export class UserRegistrationPage extends React.Component {
 
     private registrationComplete() {
         const newState = Object.assign(this.state, {
-            isRegistrationComplete: true,    
+            isRegistrationComplete: true,
         });
 
         this.setState(newState);

@@ -5,19 +5,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CategoryType from '../../types/CategoryType';
 import { Redirect, Link } from 'react-router-dom';
 import api, {ApiResponse} from '../../api/api';
+import RoledMainMenu from '../RoledMainMenu/RoledMainMenu';
+import ApiCategoryDto from '../../dtos/ApiCategoryDto';
 
 interface HomePageState {
     isUserLoggedIn: boolean;
     categories: CategoryType[];
 }
 
-interface ApiCategoryDto {
-    categoryId: number;
-    name: string;
-}
 
 class HomePage extends React.Component {
-    state: HomePageState
+    state: HomePageState;
 
     constructor(props: Readonly<{}>) {
       super(props);
@@ -30,11 +28,11 @@ class HomePage extends React.Component {
 
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.getCategories();
     }
 
-    componentWillUpdate() {
+    componentDidUpdate() {
         this.getCategories();
     }
 
@@ -50,8 +48,8 @@ class HomePage extends React.Component {
         });
     }
 
-    private putCategoriesInState(data: ApiCategoryDto[]) {
-        const categories: CategoryType[] = data.map(category => {
+    private putCategoriesInState(data?: ApiCategoryDto[]) {
+        const categories: CategoryType[] | undefined = data?.map(category => {
             return {
                 categoryId: category.categoryId,
                 name: category.name,
@@ -59,11 +57,12 @@ class HomePage extends React.Component {
             };
         });
 
+
         const newState = Object.assign(this.state, {
             categories: categories,
         });
 
-        this.setState(newState)
+        this.setState(newState);
     }
 
     private setLogginState(isLoggedIn: boolean) {
@@ -83,6 +82,8 @@ class HomePage extends React.Component {
     }
     return (
       <Container>
+                <RoledMainMenu role="user" />
+
                 <Card>
                     <Card.Body>
                         <Card.Title>
@@ -90,7 +91,7 @@ class HomePage extends React.Component {
                         </Card.Title>
 
                         <Row>
-                            { this.state.categories.map(this.singleCategory) }
+                            { this.state.categories?.map(this.singleCategory) }
                         </Row>
                     </Card.Body>
                 </Card>
@@ -100,7 +101,7 @@ class HomePage extends React.Component {
 
   private singleCategory(category: CategoryType) {
     return (
-        <Col lg="3" md="4" sm="6" xs="12">
+        <Col lg="3" md="4" sm="6" xs="12" key={ category.categoryId }>
             <Card className="mb-3">
                 <Card.Body>
                     <Card.Title as="p">
@@ -115,6 +116,7 @@ class HomePage extends React.Component {
         </Col>
     );
 }
+
 }
 
 export default HomePage;
